@@ -70,12 +70,24 @@ const gameController = (function () {
     gameboard.resetBoard();
   };
 
-  return { playTurn, isGameOver, getWinner, reset };
+  return { playTurn, isGameOver, getCurrentPlayer, getWinner, reset };
 })();
 
+const displayController = (function () {
+  const boardGrid = document.querySelector(".board-grid");
+
+  // Render the board grid
+  for (let i = 0; i < gameboard.getBoard().length; i++) {
+    const div = document.createElement("div");
+    boardGrid.appendChild(div);
+  }
+})();
+
+/*
 while (!gameController.isGameOver()) {
   gameController.playTurn();
 }
 
 const winner = gameController.getWinner();
 console.log(winner ? `${winner.name} wins!` : "It's a tie!");
+*/

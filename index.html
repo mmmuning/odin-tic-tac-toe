@@ -7,7 +7,109 @@
     <title>Tic Tac Toe</title>
   </head>
   <body>
-    
+    <div class="container">
+      <div class="player-card" id="player1">
+        <div class="player-marker">
+          <h3>Player 1</h3>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="48"
+            height="48"
+          >
+            <line
+              x1="4"
+              y1="4"
+              x2="20"
+              y2="20"
+              stroke="#82AFF3"
+              stroke-width="4"
+            />
+            <line
+              x1="20"
+              y1="4"
+              x2="4"
+              y2="20"
+              stroke="#82AFF3"
+              stroke-width="4"
+            />
+          </svg>
+        </div>
+        <form id="player1-name-form">
+          <input
+            type="text"
+            value="Player 1"
+            placeholder="Player 1"
+            name="player1Name"
+          />
+          <button type="submit">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="48"
+              height="48"
+            >
+              <polyline
+                points="4 12 10 18 20 6"
+                fill="none"
+                stroke="#fff"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <div class="board-grid"></div>
+
+      <div class="player-card" id="player2">
+        <div class="player-marker">
+          <h3>Player 2</h3>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="48"
+            height="48"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="#fdac33"
+              stroke-width="4"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <form id="player2-name-form">
+          <input
+            type="text"
+            value="Player 2"
+            placeholder="Player 2"
+            name="player2Name"
+          />
+          <button type="submit">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="48"
+              height="48"
+            >
+              <polyline
+                points="4 12 10 18 20 6"
+                fill="none"
+                stroke="#fff"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>

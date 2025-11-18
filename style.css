@@ -1,12 +1,115 @@
 :root {
-    --color-bg: black;
+    --color-primary: #82AFF3;
+    --color-secondary: #fdac33;
+    --color-accent: #FECE50;
+    --color-bg: #192A3C;
+    --color-card: #1F354A;
+    --color-card-shadow: #102133;
 }
 
 body, 
-html {
+html
+{
     font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 62.5%;
     background-color: var(--color-bg);
-    min-height: 100vh;
     margin: 0;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.player-card {
+    background-color: var(--color-card);
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+    margin: 0 5rem;
+    padding-bottom: 4rem;
+}
+#player1.active {
+    opacity: 0.5;
+}
+
+.player-card h3 {
+    font-size: 3rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+}
+
+.player-card form {
+    display: flex;
+    height: 3rem;
+    margin: 0 3rem;
+}
+
+.player-card form input {
+    font-size: 2rem;
+    border: none;
+    width: 18rem;
+    background-color: var(--color-bg);
+    color: #fff;
+    padding: 2rem 1rem;
+    border-radius: 1rem 0 0 1rem;
+}
+
+.player-card form button {
+    background-color: green;
+    border: none;
+    border-radius: 0 1rem 1rem 0;
+    height: 4rem;
+    cursor: pointer;
+}
+
+.player-card form button svg {
+    width: 3rem;
+    height: 3rem;
+}
+
+.player-marker {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 3rem;
+}
+
+.player-marker svg {
+    width: 4rem;
+    height: 4rem;
+    background-color: var(--color-bg);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.board-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin: auto;
+    border-radius: 1rem;
+}
+
+.board-grid > div {
+    font-size: 6rem;
+    background-color: var(--color-card);
+    color: #fff;
+    width: 8rem;
+    height: 8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.8rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    box-shadow: 0 10px var(--color-card-shadow);
+    transition: 0.3s;
+}
+
+.board-grid > div:hover {
+    opacity: 0.5;
 }
