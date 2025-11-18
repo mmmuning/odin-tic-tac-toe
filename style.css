@@ -1,0 +1,12 @@
+:root {
+    --color-bg: black;
+}
+
+body, 
+html {
+    font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 62.5%;
+    background-color: var(--color-bg);
+    min-height: 100vh;
+    margin: 0;
+}

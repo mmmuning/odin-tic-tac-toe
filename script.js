@@ -1,77 +1,61 @@
-function gameboard() {
+const gameboard = (function () {
   let board = Array(9).fill("");
 
   const getBoard = () => board;
 
-  const placeMarker = (index, currentPlayer) => {
-    if (board[index] === "") board[index] = currentPlayer.marker;
+  const placeMarker = (index, marker) => {
+    if (board[index] === "") board[index] = marker;
   };
 
-  return { getBoard, placeMarker };
-}
+  const resetBoard = () => {
+    board = Array(9).fill("");
+  };
+
+  return { getBoard, placeMarker, resetBoard };
+})();
 
 function createPlayer(name, marker) {
   return { name, marker };
 }
 
-function gameController() {
-  const gb = gameboard();
-
-  // Create Players
+const gameController = (function () {
   const player1 = createPlayer("Player One", "X");
   const player2 = createPlayer("Player Two", "O");
 
-  // Keep track of the player
   let currentPlayer = player1;
-  let winner;
+  let winner = null;
 
   const playTurn = () => {
-    // Get player marker position
-    const markerPos = prompt("Place Marker [0-8]: ");
-
-    // Tell gameboard to place marker
-    gb.placeMarker(markerPos, currentPlayer);
-
-    // Switch players at the end of every turn
+    const pos = prompt("Place Marker [0-8]: ");
+    gameboard.placeMarker(pos, currentPlayer.marker);
     currentPlayer = currentPlayer === player1 ? player2 : player1;
   };
 
-  // Check if there's 3-in-a-row/column/diagonal win
   const checkWinner = () => {
-    const winningCombinations = [
-      [0, 1, 2], // Rows
+    const b = gameboard.getBoard();
+    const lines = [
+      [0, 1, 2],
       [3, 4, 5],
       [6, 7, 8],
-      [0, 3, 6], // Columns
+      [0, 3, 6],
       [1, 4, 7],
       [2, 5, 8],
-      [0, 4, 8], // Diagonals
+      [0, 4, 8],
       [2, 4, 6],
     ];
 
-    // First check if there's a winner
-    // Check if X or O has the winning combinations
-    for (const combo of winningCombinations) {
-      const [a, b, c] = combo;
-      if (
-        gb.getBoard()[a] !== "" &&
-        gb.getBoard()[a] === gb.getBoard()[b] &&
-        gb.getBoard()[a] === gb.getBoard()[c]
-      ) {
-        winner = gb.getBoard()[a] === player1.marker ? player1 : player2;
+    for (const [a, bIdx, c] of lines) {
+      if (b[a] !== "" && b[a] === b[bIdx] && b[a] === b[c]) {
+        winner = b[a] === player1.marker ? player1 : player2;
         return true;
       }
     }
-
     return false;
   };
 
-  // Check if board is filled
   const isBoardFilled = () => {
-    const filledCount = gb
-      .getBoard()
-      .reduce((acc, index) => (index !== "" ? acc + 1 : acc), 0);
-    return filledCount === gb.getBoard().length;
+    const filled = gameboard.getBoard().every((cell) => cell !== "");
+    return filled;
   };
 
   const isGameOver = () => {
@@ -80,36 +64,18 @@ function gameController() {
 
   const getWinner = () => winner;
 
-  const resetGame = () => {
-    // Clear the board
-    gb.getBoard().fill("");
-    // Reset winner
-    winner = undefined;
-    // Reset current player
+  const reset = () => {
+    winner = null;
     currentPlayer = player1;
+    gameboard.resetBoard();
   };
 
-  return {
-    playTurn,
-    checkWinner,
-    isBoardFilled,
-    isGameOver,
-    getWinner,
-    resetGame,
-  };
+  return { playTurn, isGameOver, getWinner, reset };
+})();
+
+while (!gameController.isGameOver()) {
+  gameController.playTurn();
 }
 
-const game = gameController();
-
-// Check if board is all filled or when there's a win instead of looping
-while (!game.isGameOver()) {
-  game.playTurn();
-}
-
-if (game.getWinner() !== undefined) {
-  console.log(game.getWinner());
-} else {
-  console.log("It's a TIE!!");
-}
-
-game.resetGame();
+const winner = gameController.getWinner();
+console.log(winner ? `${winner.name} wins!` : "It's a tie!");
