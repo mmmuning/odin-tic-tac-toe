@@ -32,7 +32,11 @@ const gameController = (function () {
   };
 
   const playTurn = (index) => {
+    const board = gameboard.getBoard();
     const marker = currentPlayer.marker;
+
+    if (board[index] !== "") return null; // Ignore invalid move
+
     gameboard.placeMarker(index, marker);
 
     const winningIndexes = checkWinner();
@@ -130,7 +134,7 @@ const displayController = (function () {
   const handleGridCellClick = (element) => {
     const index = element.dataset.index;
     const marker = gameController.playTurn(index);
-    displayController.renderMarker(element, marker);
+    if (marker) renderMarker(element, marker);
   };
 
   const renderMarker = (element, currentPlayerMarker) => {
