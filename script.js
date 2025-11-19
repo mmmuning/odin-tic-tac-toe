@@ -25,9 +25,20 @@ const gameController = (function () {
   let currentPlayer = player1;
   let winner = null;
 
-  const playTurn = () => {
-    const pos = prompt("Place Marker [0-8]: ");
-    gameboard.placeMarker(pos, currentPlayer.marker);
+  const getCurrentPlayer = () => currentPlayer;
+
+  const playGame = () => {
+    displayController.renderBoard();
+  };
+
+  const playTurn = (index) => {
+    const marker = currentPlayer.marker;
+    gameboard.placeMarker(index, marker);
+    switchPlayer();
+    return marker;
+  };
+
+  const switchPlayer = () => {
     currentPlayer = currentPlayer === player1 ? player2 : player1;
   };
 
@@ -44,8 +55,8 @@ const gameController = (function () {
       [2, 4, 6],
     ];
 
-    for (const [a, bIdx, c] of lines) {
-      if (b[a] !== "" && b[a] === b[bIdx] && b[a] === b[c]) {
+    for (const [a, b, c] of lines) {
+      if (b[a] !== "" && b[a] === b[b] && b[a] === b[c]) {
         winner = b[a] === player1.marker ? player1 : player2;
         return true;
       }
@@ -70,17 +81,75 @@ const gameController = (function () {
     gameboard.resetBoard();
   };
 
-  return { playTurn, isGameOver, getCurrentPlayer, getWinner, reset };
+  return {
+    playGame,
+    playTurn,
+    switchPlayer,
+    isGameOver,
+    getCurrentPlayer,
+    getWinner,
+    reset,
+  };
 })();
 
 const displayController = (function () {
   const boardGrid = document.querySelector(".board-grid");
 
-  // Render the board grid
-  for (let i = 0; i < gameboard.getBoard().length; i++) {
-    const div = document.createElement("div");
-    boardGrid.appendChild(div);
-  }
+  const renderBoard = () => {
+    for (let i = 0; i < gameboard.getBoard().length; i++) {
+      const gridCell = document.createElement("div");
+      gridCell.dataset.index = i;
+      gridCell.addEventListener("click", () => handleGridCellClick(gridCell));
+      boardGrid.appendChild(gridCell);
+    }
+  };
+
+  const handleGridCellClick = (element) => {
+    const index = element.dataset.index;
+    const marker = gameController.playTurn(index);
+    displayController.renderMarker(element, marker);
+  };
+
+  const renderMarker = (element, currentPlayerMarker) => {
+    const svgNS = "http://www.w3.org/2000/svg";
+    const playerMarker = document.createElementNS(svgNS, "svg");
+    playerMarker.setAttribute("width", "48");
+    playerMarker.setAttribute("height", "48");
+    playerMarker.setAttribute("viewBox", "0 0 24 24");
+
+    if (currentPlayerMarker === "X") {
+      const line1 = document.createElementNS(svgNS, "line");
+      line1.setAttribute("x1", "4");
+      line1.setAttribute("y1", "4");
+      line1.setAttribute("x2", "20");
+      line1.setAttribute("y2", "20");
+      line1.setAttribute("stroke", "#82AFF3");
+      line1.setAttribute("stroke-width", "4");
+      playerMarker.appendChild(line1);
+
+      const line2 = document.createElementNS(svgNS, "line");
+      line2.setAttribute("x1", "20");
+      line2.setAttribute("y1", "4");
+      line2.setAttribute("x2", "4");
+      line2.setAttribute("y2", "20");
+      line2.setAttribute("stroke", "#82AFF3");
+      line2.setAttribute("stroke-width", "4");
+      playerMarker.appendChild(line2);
+    } else {
+      const circle = document.createElementNS(svgNS, "circle");
+      circle.setAttribute("cx", "12");
+      circle.setAttribute("cy", "12");
+      circle.setAttribute("r", "10");
+      circle.setAttribute("stroke", "#fdac33");
+      circle.setAttribute("stroke-width", "4");
+      circle.setAttribute("fill", "none");
+      playerMarker.appendChild(circle);
+    }
+
+    element.appendChild(playerMarker);
+  };
+
+  return { renderBoard, renderMarker, handleGridCellClick };
 })();
 
 /*
@@ -91,3 +160,5 @@ while (!gameController.isGameOver()) {
 const winner = gameController.getWinner();
 console.log(winner ? `${winner.name} wins!` : "It's a tie!");
 */
+
+gameController.playGame();
