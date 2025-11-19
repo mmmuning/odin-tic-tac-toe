@@ -42,35 +42,6 @@ html
     color: #fff;
 }
 
-.player-card form {
-    display: flex;
-    height: 3rem;
-    margin: 0 3rem;
-}
-
-.player-card form input {
-    font-size: 2rem;
-    border: none;
-    width: 18rem;
-    background-color: var(--color-bg);
-    color: #fff;
-    padding: 2rem 1rem;
-    border-radius: 1rem 0 0 1rem;
-}
-
-.player-card form button {
-    background-color: green;
-    border: none;
-    border-radius: 0 1rem 1rem 0;
-    height: 4rem;
-    cursor: pointer;
-}
-
-.player-card form button svg {
-    width: 3rem;
-    height: 3rem;
-}
-
 .player-marker {
     display: flex;
     justify-content: space-between;
@@ -85,6 +56,36 @@ html
     padding: 1rem;
     border-radius: 1rem;
 }
+
+.player-name {
+    display: flex;
+    height: 3rem;
+    margin: 0 3rem;
+}
+
+.player-name input {
+    font-size: 2rem;
+    border: none;
+    width: 18rem;
+    background-color: var(--color-bg);
+    color: #fff;
+    padding: 2rem 1rem;
+    border-radius: 1rem 0 0 1rem;
+}
+
+.player-name button {
+    background-color: green;
+    border: none;
+    border-radius: 0 1rem 1rem 0;
+    height: 4rem;
+    cursor: pointer;
+}
+
+.player-name button svg {
+    width: 3rem;
+    height: 3rem;
+}
+
 
 .board-grid {
     display: grid;

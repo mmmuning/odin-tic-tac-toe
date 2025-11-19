@@ -18,12 +18,40 @@ function createPlayer(name, marker) {
   return { name, marker };
 }
 
-const gameController = (function () {
-  const player1 = createPlayer("Player One", "X");
-  const player2 = createPlayer("Player Two", "O");
+const playerController = (function () {
+  const players = [
+    { name: "Player 1", marker: "X" },
+    { name: "Player 2", marker: "O" },
+  ];
 
+  const setPlayerName = (index, name) => {
+    if (players[index]) players[index].name = name || players[index].name;
+  };
+
+  const getPlayer = (index) => players[index];
+
+  const init = () => {
+    document.querySelector("#btn-set-player1").addEventListener("click", () => {
+      const name = document.querySelector("#player1-name").value.trim();
+      setPlayerName(0, name);
+    });
+
+    document.querySelector("#btn-set-player2").addEventListener("click", () => {
+      const name = document.querySelector("#player2-name").value.trim();
+      setPlayerName(1, name);
+    });
+  };
+
+  return { setPlayerName, getPlayer, init };
+})();
+
+const gameController = (function () {
+  const player1 = playerController.getPlayer(0);
+  const player2 = playerController.getPlayer(1);
   let currentPlayer = player1;
   let winner = null;
+
+  console.log(currentPlayer);
 
   const getCurrentPlayer = () => currentPlayer;
 
@@ -214,4 +242,5 @@ const displayController = (function () {
   };
 })();
 
+playerController.init();
 gameController.playGame();
