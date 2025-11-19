@@ -34,6 +34,18 @@ const gameController = (function () {
   const playTurn = (index) => {
     const marker = currentPlayer.marker;
     gameboard.placeMarker(index, marker);
+
+    const winningIndexes = checkWinner();
+
+    if (winningIndexes) {
+      console.log(`${winner.name} wins!`);
+      displayController.highlightGridCells(winningIndexes);
+      displayController.showResultModal(winner.name);
+    } else if (isBoardFilled()) {
+      console.log("It's a tie!");
+      displayController.showResultModal(null);
+    }
+
     switchPlayer();
     return marker;
   };
@@ -43,7 +55,7 @@ const gameController = (function () {
   };
 
   const checkWinner = () => {
-    const b = gameboard.getBoard();
+    const board = gameboard.getBoard();
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -56,12 +68,13 @@ const gameController = (function () {
     ];
 
     for (const [a, b, c] of lines) {
-      if (b[a] !== "" && b[a] === b[b] && b[a] === b[c]) {
-        winner = b[a] === player1.marker ? player1 : player2;
-        return true;
+      if (board[a] !== "" && board[a] === board[b] && board[a] === board[c]) {
+        winner = board[a] === player1.marker ? player1 : player2;
+        return [a, b, c];
       }
     }
-    return false;
+
+    return null;
   };
 
   const isBoardFilled = () => {
@@ -94,8 +107,18 @@ const gameController = (function () {
 
 const displayController = (function () {
   const boardGrid = document.querySelector(".board-grid");
+  const modal = document.querySelector("#result-modal");
+  const gameResult = modal.querySelector("#game-result");
+  const winnerName = modal.querySelector("#winner-name");
+  const restartBtn = document.querySelector("#btn-restart");
 
   const renderBoard = () => {
+    // Remove existing cells
+    while (boardGrid.firstChild) {
+      boardGrid.removeChild(boardGrid.firstChild);
+    }
+
+    // Render new cells
     for (let i = 0; i < gameboard.getBoard().length; i++) {
       const gridCell = document.createElement("div");
       gridCell.dataset.index = i;
@@ -149,16 +172,42 @@ const displayController = (function () {
     element.appendChild(playerMarker);
   };
 
-  return { renderBoard, renderMarker, handleGridCellClick };
+  const highlightGridCells = (indexes) => {
+    indexes.forEach((index) => {
+      const cell = boardGrid.querySelector(`[data-index='${index}']`);
+      cell.classList.add("highlight");
+    });
+  };
+
+  const showResultModal = (winner) => {
+    if (winner !== null) {
+      gameResult.textContent = "WINNER!";
+      winnerName.textContent = winner;
+    } else {
+      winnerName.textContent = "";
+      gameResult.textContent = "IT'S A TIE!";
+    }
+    modal.style.display = "flex";
+  };
+
+  const hideResultModal = () => {
+    modal.style.display = "none";
+  };
+
+  restartBtn.addEventListener("click", () => {
+    hideResultModal();
+    gameController.reset();
+    gameController.playGame();
+  });
+
+  return {
+    renderBoard,
+    renderMarker,
+    handleGridCellClick,
+    highlightGridCells,
+    showResultModal,
+    hideResultModal,
+  };
 })();
-
-/*
-while (!gameController.isGameOver()) {
-  gameController.playTurn();
-}
-
-const winner = gameController.getWinner();
-console.log(winner ? `${winner.name} wins!` : "It's a tie!");
-*/
 
 gameController.playGame();
